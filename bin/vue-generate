@@ -41,7 +41,6 @@ program.parse(process.argv);
 /**
  * Generate
  */
-const suffix = '.vue';
 const baseDir = './src';
 const basePath = path.join(process.cwd(), baseDir);
 
@@ -50,6 +49,34 @@ spinner.start('generating, please wait......');
 console.log('');
 
 checkBasePathIsexists(basePath, baseDir);
+
+function generate() {
+  let baseDir = './admin'
+  let moduleName = ''
+  let resourceName = ''
+
+  if (program.args.length > 1) {
+    baseDir = `./${program.args[0]}`
+
+    if (program.args[1].indexOf('resource:') > -1) {
+      const resources = program.args[1].replace('resource:', '').split(':')
+      if (resources.length === 0) {
+        console.log('uni-smile-cli g admin resource:supplier:wifi')
+      } else {
+        moduleName = resources[0]
+        resourceName = resources[1]
+      }
+    } else {
+      console.log('uni-smile-cli g admin resource:wifi')
+    }
+
+    checkPathIsexists(baseDir, moduleName, resourceName, 'index')
+  } else {
+    console.log('uni-smile-cli g admin resource:wifi')
+  }
+  console.log('');
+  spinner.stop();
+}
 
 // check basepath
 function checkBasePathIsexists(currentPath, currentDir) {
@@ -60,81 +87,77 @@ function checkBasePathIsexists(currentPath, currentDir) {
   }
 }
 
-// check path
-function checkPathIsexists(baseDir, moduleName, resourceName, filename) {
-  const currentBaseDir = path.join(basePath, baseDir);
-  const moduleDir = `${currentBaseDir}/${moduleName}`
-  const resourceDir = `${currentBaseDir}/${moduleName}/${resourceName}`
-
-  if(fs.existsSync(resourceDir)) {
-    checkFileIsexists(resourceDir, filename);
-  } else {
-    if (!fs.existsSync(currentBaseDir)) { fs.mkdirSync(currentBaseDir) }
-    if (!fs.existsSync(moduleDir)) { fs.mkdirSync(moduleDir) }
-    if (!fs.existsSync(resourceDir)) { fs.mkdirSync(resourceDir) }
-
-    checkFileIsexists(resourceDir, filename);
+function checkDirIsexists(baseDir) {
+  if(!fs.existsSync(baseDir)) {
+    fs.mkdirSync(baseDir)
   }
-
 }
 
-function checkFileIsexists(currentPath, filename) {
+function checkPathIsexists(baseDir, moduleName, resourceName, filename) {
+  const currentBaseDir = path.join(basePath, baseDir);
+  const viewFilesDir = `${currentBaseDir}/views`
+  const viewModuleDir = `${viewFilesDir}/${moduleName}`
+  const viewResourceDir = `${viewFilesDir}/${moduleName}/${resourceName}`
+  const viewResourceComponentsDir = `${viewResourceDir}/components`
+
+  checkDirIsexists(currentBaseDir)
+  checkDirIsexists(viewFilesDir)
+  checkDirIsexists(viewModuleDir)
+  checkDirIsexists(viewResourceDir)
+  checkDirIsexists(viewResourceComponentsDir)
+
+  createViewTemplates(viewResourceDir, filename, generateTemplate(filename, './template/indexVueTemplate.js'))
+  createViewTemplates(viewResourceComponentsDir, filename, generateTemplate(filename, './template/indexVueTemplate.js'))
+}
+
+function createViewTemplates(currentPath, filename, template) {
   if(Object.prototype.toString.call(filename) === '[object Array]') {
     filename.forEach(function(onefile) {
       onefile = onefile.replace(/([A-Z])/g,"-$1").toLowerCase();
       let file = path.join(currentPath, './' + onefile);
-      generateVueFile(file, onefile);
+      generateVueFile(file, onefile, template);
     })
   } else {
     filename = filename.replace(/([A-Z])/g,"-$1").toLowerCase();
     let file = path.join(currentPath, './' + filename);
-    generateVueFile(file, filename);
+    generateVueFile(file, filename, template);
   }
 }
 
-function generateVueFile(file, filename) {
+function generateVueFile(file, filename, template) {
   console.log('');
-  spinner.start(filename + suffix + 'is generating......');
-  if(fs.existsSync(file + suffix)) {
-    spinner.fail(chalk.red(filename + suffix + ' exists.'));
+  spinner.start(filename + '.vue' + 'is generating......');
+  if(fs.existsSync(file + '.vue')) {
+    spinner.fail(chalk.red(filename + '.vue' + ' exists.'));
   } else {
-    fs.writeFileSync(file + suffix, generateTemplate(filename));
-    spinner.succeed(filename + suffix + ' generated successfully');
+    fs.writeFileSync(file + '.vue', template);
+    spinner.succeed(filename + '.vue' + ' generated successfully');
   }
 }
 
-function generate() {
-  console.log(program.args)
-  let baseDir = './admin'
-  let moduleName = ''
-  let resourceName = ''
-
-  if (program.args.length > 1) {
-    baseDir = `./${program.args[0]}`
-
-    if (program.args[1].indexOf('resource:') > -1) {
-      const resources = program.args[1].replace('resource:', '').split(':')
-      if (resources.length === 0) return
-      moduleName = resources[0]
-      resourceName = resources[1]
-    }
-
-    checkPathIsexists(baseDir, moduleName, resourceName, 'index')
-  } else {
-    console.log('uni-smile-cli g admin resource:wifi')
-  }
-  // if (program.args.length === 1) {
-  //   checkPathIsexists('./components', program.args[0]);
-  // } else if(program.args.length === 2) {
-  //   checkPathIsexists(program.args[0], program.args[1]);
-  // } else {
-  //   checkPathIsexists(program.args.shift(), program.args);
-  // }
+function generateJsFile(file, filename, template) {
   console.log('');
-  spinner.stop();
+  spinner.start(filename + '.js' + 'is generating......');
+  if(fs.existsSync(file + '.js')) {
+    spinner.fail(chalk.red(filename + '.js' + ' exists.'));
+  } else {
+    fs.writeFileSync(file + '.js', template);
+    spinner.succeed(filename + '.js' + ' generated successfully');
+  }
 }
 
-function generateTemplate(filename) {
-  const indexViewTemplate = require('./template/indexVueTemplate.js')(filename)
-  return indexViewTemplate;
+function generateCssFile(file, filename) {
+  console.log('');
+  spinner.start(filename + '.css' + 'is generating......');
+  if(fs.existsSync(file + '.css')) {
+    spinner.fail(chalk.red(filename + '.js' + ' exists.'));
+  } else {
+    fs.writeFileSync(file + '.css', template);
+    spinner.succeed(filename + '.css' + ' generated successfully');
+  }
+}
+
+function generateTemplate(filename, templatePath) {
+  const template = require(templatePath)(filename)
+  return template;
 }
