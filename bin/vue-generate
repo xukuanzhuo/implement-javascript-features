@@ -15,17 +15,12 @@ const spinner = ora({
 program.on('--help', function() {
   console.log('  Examples:');
   console.log('');
-  console.log('    $ vue-g g --help');
-  console.log('    $ vue-g g -h');
+  console.log('    $ uni-smile-cli g --help');
+  console.log('    $ uni-smile-cli g -h');
   console.log('');
-  console.log(chalk.gray('    # create a new my-component.vue file with an template in components directory'));
-  console.log('    $ vue-g g my-component');
-  console.log(chalk.gray('    # create a new my-component.vue file with an template in libs directory'));
-  console.log('    $ vue-g g libs my-component');
-  console.log(chalk.gray('    # create more new my-component01.vue, my-component02.vue and my-component03.vue files with an template in libs directory'));
-  console.log('    $ vue-g g libs my-component01 my-component02 my-component03');
-  console.log(chalk.gray('    # create more new my-component01.vue, my-component02.vue and my-component03.vue files with an template in ./components/libs directory'));
-  console.log('    $ vue-g g ./components/libs my-component01 my-component02 my-component03');
+  console.log(chalk.gray('    # create a new resource files with an template in components directory'));
+  console.log('    $ uni-smile-cli g admin resource:supplier:wifi');
+  console.log(chalk.gray('    admin: smile/admin path; supplier: moduleName; wifi: resourceName'));
   console.log('');
 });
 

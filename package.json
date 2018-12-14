@@ -12,7 +12,7 @@
     "ora": "^2.0.0"
   },
   "bin": {
-    "uni-vue-cli": "./bin/vue"
+    "uni-smile-cli": "./bin/vue"
   },
   "author": "xkz",
   "license": "ISC"
