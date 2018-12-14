@@ -157,6 +157,7 @@ function checkPathIsexists(baseDir, moduleName, resourceName) {
 
   createViewTemplates(currentBaseDir, moduleName, resourceName)
   craeteApiTemplate(currentBaseDir, moduleName, resourceName)
+  createStoreTemplate(currentBaseDir, moduleName, resourceName)
 }
 
 function createViewTemplates(currentBaseDir, moduleName, resourceName) {
@@ -179,10 +180,15 @@ function craeteApiTemplate(currentBaseDir, moduleName, resourceName){
 
   checkDirIsexists(apiFilesDir)
 
-
   checkFileIsexists(apiFilesDir, resourceName, generateJsFile, generateJsTemplate(moduleName, resourceName, './template/api/resourceTemplate.js'))
 }
 
-function createStoreTeamplate(currentBaseDir) {
+function createStoreTemplate(currentBaseDir, moduleName, resourceName){
+  const storeFilesDir = `${currentBaseDir}/store`
+  const storeModuleFilesDir = `${currentBaseDir}/store/modules`
 
+  checkDirIsexists(storeFilesDir)
+  checkDirIsexists(storeModuleFilesDir)
+
+  checkFileIsexists(storeModuleFilesDir, resourceName, generateJsFile, generateJsTemplate(moduleName, resourceName, './template/store/storeTemplate.js'))
 }

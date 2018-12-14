@@ -1,0 +1,7 @@
+function firstUpperCase(str) {
+  return str.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase());
+}
+
+module.exports = function(moduleName, filename){
+  return `import { get${firstUpperCase(filename)}s, create${firstUpperCase(filename)}, update${firstUpperCase(filename)}, delete${firstUpperCase(filename)} } from '@/admin/api/${filename}'\n\nconst ${filename}StoreModule = {\n  state: {\n    ${filename}s: [],\n    meta: {\n      pagination: {}\n    }\n  },\n  actions: {\n    Get${firstUpperCase(filename)}s: async ({ commit }, filterQuery) => {\n      const res = await get${firstUpperCase(filename)}s(filterQuery)\n\n      commit('SET_${filename.toUpperCase}S', res.data)\n      commit('SET_${filename.toUpperCase}_META', res.meta)\n    },\n    Create${firstUpperCase(filename)}: async ({ commit }, ${filename}Params) => {\n      await create${firstUpperCase(filename)}(${filename}Params)\n    },\n    Update${firstUpperCase(filename)}: async ({ commit }, ${filename}Params) => {\n      await update${firstUpperCase(filename)}(${filename}Params)\n    },\n    Delete${firstUpperCase(filename)}: async ({ commit }, id) => {\n      await delete${firstUpperCase(filename)}(id)\n    }\n  },\n  mutations: {\n    SET_${filename.toUpperCase}S: (state, ${filename}s) => {\n      state.${filename}s = ${filename}s\n    },\n    SET_${filename.toUpperCase}_META: (state, meta) => {\n      state.meta = meta\n    }\n  }\n}\n\nexport default ${filename}StoreModule`
+}
