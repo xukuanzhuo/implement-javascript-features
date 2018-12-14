@@ -70,7 +70,7 @@ function generate() {
       console.log('uni-smile-cli g admin resource:wifi')
     }
 
-    checkPathIsexists(baseDir, moduleName, resourceName, 'index')
+    checkPathIsexists(baseDir, moduleName, resourceName)
   } else {
     console.log('uni-smile-cli g admin resource:wifi')
   }
@@ -93,38 +93,31 @@ function checkDirIsexists(baseDir) {
   }
 }
 
-function checkPathIsexists(baseDir, moduleName, resourceName, filename) {
-  const currentBaseDir = path.join(basePath, baseDir);
-  const viewFilesDir = `${currentBaseDir}/views`
-  const viewModuleDir = `${viewFilesDir}/${moduleName}`
-  const viewResourceDir = `${viewFilesDir}/${moduleName}/${resourceName}`
-  const viewResourceComponentsDir = `${viewResourceDir}/components`
-
-  checkDirIsexists(currentBaseDir)
-  checkDirIsexists(viewFilesDir)
-  checkDirIsexists(viewModuleDir)
-  checkDirIsexists(viewResourceDir)
-  checkDirIsexists(viewResourceComponentsDir)
-
-  createViewTemplates(viewResourceDir, filename, generateTemplate(filename, './template/indexVueTemplate.js'))
-  createViewTemplates(viewResourceComponentsDir, filename, generateTemplate(filename, './template/indexVueTemplate.js'))
-}
-
-function createViewTemplates(currentPath, filename, template) {
+function checkFileIsexists(currentPath, filename, generateFun, template) {
   if(Object.prototype.toString.call(filename) === '[object Array]') {
     filename.forEach(function(onefile) {
       onefile = onefile.replace(/([A-Z])/g,"-$1").toLowerCase();
       let file = path.join(currentPath, './' + onefile);
-      generateVueFile(file, onefile, template);
+      generateFun(file, onefile, template);
     })
   } else {
     filename = filename.replace(/([A-Z])/g,"-$1").toLowerCase();
     let file = path.join(currentPath, './' + filename);
-    generateVueFile(file, filename, template);
+    generateFun(file, filename, template);
   }
 }
 
-function generateVueFile(file, filename, template) {
+
+function generateTemplate(filename, templatePath) {
+  const template = require(templatePath)(filename)
+  return template;
+}
+
+function generateJsTemplate(moduleName, filename, templatePath) {
+  return require(templatePath)(moduleName, filename)
+}
+
+function generateVueFile (file, filename, template) {
   console.log('');
   spinner.start(filename + '.vue' + 'is generating......');
   if(fs.existsSync(file + '.vue')) {
@@ -135,7 +128,7 @@ function generateVueFile(file, filename, template) {
   }
 }
 
-function generateJsFile(file, filename, template) {
+function generateJsFile (file, filename, template) {
   console.log('');
   spinner.start(filename + '.js' + 'is generating......');
   if(fs.existsSync(file + '.js')) {
@@ -146,7 +139,7 @@ function generateJsFile(file, filename, template) {
   }
 }
 
-function generateCssFile(file, filename) {
+function generateCssFile (file, filename, template) {
   console.log('');
   spinner.start(filename + '.css' + 'is generating......');
   if(fs.existsSync(file + '.css')) {
@@ -157,7 +150,39 @@ function generateCssFile(file, filename) {
   }
 }
 
-function generateTemplate(filename, templatePath) {
-  const template = require(templatePath)(filename)
-  return template;
+function checkPathIsexists(baseDir, moduleName, resourceName) {
+  const currentBaseDir = path.join(basePath, baseDir)
+
+  checkDirIsexists(currentBaseDir)
+
+  createViewTemplates(currentBaseDir, moduleName, resourceName)
+  craeteApiTemplate(currentBaseDir, moduleName, resourceName)
+}
+
+function createViewTemplates(currentBaseDir, moduleName, resourceName) {
+  const viewFilesDir = `${currentBaseDir}/views`
+  const viewModuleDir = `${viewFilesDir}/${moduleName}`
+  const viewResourceDir = `${viewFilesDir}/${moduleName}/${resourceName}s`
+  const viewResourceComponentsDir = `${viewResourceDir}/components`
+
+  checkDirIsexists(viewFilesDir)
+  checkDirIsexists(viewModuleDir)
+  checkDirIsexists(viewResourceDir)
+  checkDirIsexists(viewResourceComponentsDir)
+
+  checkFileIsexists(viewResourceDir, 'index', generateVueFile, generateTemplate('index', './template/views/indexVueTemplate.js'))
+  checkFileIsexists(viewResourceDir, 'index', generateCssFile, generateTemplate('index', './template/views/indexCssTemplate.js'))
+}
+
+function craeteApiTemplate(currentBaseDir, moduleName, resourceName){
+  const apiFilesDir = `${currentBaseDir}/api`
+
+  checkDirIsexists(apiFilesDir)
+
+
+  checkFileIsexists(apiFilesDir, resourceName, generateJsFile, generateJsTemplate(moduleName, resourceName, './template/api/resourceTemplate.js'))
+}
+
+function createStoreTeamplate(currentBaseDir) {
+
 }
