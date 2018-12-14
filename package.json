@@ -1,0 +1,19 @@
+{
+  "name": "uni-vue-cli",
+  "version": "1.0.0",
+  "description": "uniqueway vue cli",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "chalk": "^2.4.0",
+    "commander": "^2.15.1",
+    "ora": "^2.0.0"
+  },
+  "bin": {
+    "uni-vue-cli": "./bin/vue"
+  },
+  "author": "xkz",
+  "license": "ISC"
+}
