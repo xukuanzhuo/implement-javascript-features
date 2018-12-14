@@ -1,0 +1,8 @@
+.header {
+  margin-bottom: 20px;
+
+  .header-actions {
+    display: inline-block;
+    float: right;
+  }
+}

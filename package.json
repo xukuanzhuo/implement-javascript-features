@@ -1,7 +1,7 @@
 {
-  "name": "uni-vue-cli",
+  "name": "uni-smile-cli",
   "version": "1.0.0",
-  "description": "uniqueway vue cli",
+  "description": "uniqueway smile vue cli",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -15,5 +15,6 @@
     "uni-smile-cli": "./bin/vue"
   },
   "author": "xkz",
+  "git repository": "git@github.com:xukuanzhuo/uni-smile-cli.git",
   "license": "ISC"
 }
