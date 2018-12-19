@@ -29,9 +29,9 @@ program.parse(process.argv);
 /**
  * Help
  */
-// (function help () {
-//   if (program.args.length < 1) return program.help();
-// })()
+(function help () {
+  if (program.args.length < 2) return program.help();
+})()
 
 /**
  * Generate
