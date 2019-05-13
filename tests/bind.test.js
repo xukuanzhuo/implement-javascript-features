@@ -1,6 +1,6 @@
 import '../src/bind'
 
-test('return binded function', () => {
+test('should return binded function', () => {
 
   var a = {
     name: 'a',
@@ -16,8 +16,25 @@ test('return binded function', () => {
     }
   }
 
-  const bindedFoo = a.foo.bind2(b, 'james')
+  const nativeBind = a.foo.bind(b, 'james')
+  const customizeBind = a.foo.bind2(b, 'james')
 
-  expect(bindedFoo()).toBe('james')
-  expect(bindedFoo('woke')).toBe('woke')
+  expect(customizeBind()).toBe('james')
+  expect(customizeBind('woke')).toBe('woke')
+  expect(customizeBind('woke')).toBe(nativeBind('woke'))
+
+  function foo (name, age) {
+    this.type = 'bind'
+    this.name = name
+    this.age = age
+  }
+
+  const ntvBindFun = foo.bind(b, 'james')
+  const ctzBindFun = foo.bind2(b, 'james')
+  const ntvBindObj = new ntvBindFun(30)
+  const ctzBindObj = new ctzBindFun(30)
+  
+  expect(ntvBindObj.name).toBe('james')
+  expect(ntvBindObj.name).toBe(ctzBindObj.name)
+  expect(ntvBindObj.age).toBe(ctzBindObj.age)
 })

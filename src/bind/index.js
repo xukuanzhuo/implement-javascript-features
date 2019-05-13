@@ -3,10 +3,17 @@
 Function.prototype.bind2 = function (context) {
   const _this = this
 
-  var args = Array.prototype.slice.call(arguments, 1)
+  const args = Array.prototype.slice.call(arguments, 1)
 
-  return function () {
+  const fNOP = function () {}
+
+  const returnFun = function () {
     const bindedArgs = Array.prototype.slice.call(arguments)
-    return _this.apply(context, args.concat(bindedArgs))
+    const ctx = this instanceof fNOP ? this : context
+    return _this.apply(ctx, args.concat(bindedArgs))
   }
+
+  fNOP.prototype = this.prototype
+  returnFun.prototype = new fNOP()
+  return returnFun
 }
