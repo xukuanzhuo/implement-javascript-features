@@ -40,7 +40,7 @@ function myPromise (executor) {
   }
 }
 
-myPromise.prototype.then = function (onResolved, onRejectd) {
+myPromise.prototype.then = function (onResolved, onRejected) {
   var _this = this
   var promise = null
 
