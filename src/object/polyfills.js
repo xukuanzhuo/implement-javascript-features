@@ -16,3 +16,10 @@ function typeOf (instance) {
   const type = Object.prototype.toString.call(instance)
   return types[type]
 }
+
+
+function createObj (obj) {
+  function F(){}
+  F.prototype = obj
+  return new F()
+}

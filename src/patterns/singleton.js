@@ -1,5 +1,6 @@
 var singleton = function () {
   var instance
+
   const createInstance = function () {
     this.a = 1
     this.b = 2

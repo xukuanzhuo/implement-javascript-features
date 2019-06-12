@@ -10,29 +10,23 @@ function sleep (fn, delay) {
 
 function debounce (fn, delay) {
   let timer = null
-  if (timer) {
+  return function () {
     clearTimeout(timer)
-    timer = null
-  } else {
-    timer = setTimeout(fn, delay)
+    const ctx = this;
+    const args = arguments
+    timer = setTimeout(function () {
+      fn.apply(ctx, args)
+    }, delay)
   }
 }
 
-function throttle (fn, wait) {
-  let timer = null
-  let lastTime = null
-
-  var currentTime = new Date()
-  if (currentTime >= lastTime + wait) {
-    fn()
-    lastTime = currentTime
-  } else {
-    if (timer) {
-      clearTimeout(timer)
-      timer = null
+function throttle (action, delay){
+  var last = 0
+  return function () {
+    var curr = Date.now()
+    if (curr - last > delay) {
+      action.apply(this, arguments)
+      last = curr 
     }
-    timer = setTimeout(function () {
-      fn()
-    }, wait)
-  }   
+  }
 }
