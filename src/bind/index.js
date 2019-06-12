@@ -9,7 +9,7 @@ Function.prototype.bind2 = function (context) {
 
   const returnFun = function () {
     const bindedArgs = Array.prototype.slice.call(arguments)
-    const ctx = this instanceof fNOP ? this : context
+    const ctx = this instanceof fNOP && context ? this : context
     return _this.apply(ctx, args.concat(bindedArgs))
   }
 

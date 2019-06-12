@@ -8,6 +8,10 @@ String.prototype.repeatify = function (num) {
   return retStr
 }
 
-String.prototype.isAnagram = function (str, targetStr) {
-  Array.from(str).sort().join('')
+String.prototype.isAnagram = function (targetStr) {
+  return Array.from(this).sort().join('') === Array.from(targetStr).sort().join('')
+}
+
+String.prototype.buffer = function () {
+
 }

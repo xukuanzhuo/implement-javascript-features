@@ -1,5 +1,5 @@
 class PubSubHandler {
-  constructor(){
+  constructor (){
     this.eventPool = new Map()
   }
 

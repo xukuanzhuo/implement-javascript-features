@@ -10,7 +10,7 @@ class Observer {
   }
 
   // 内部状态变化, 触发观察者列表
-  change (val) {
+  changed (val) {
     this.internalState= val
     this.observers.forEach(observer => observer(val))
   }

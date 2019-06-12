@@ -23,3 +23,7 @@ function createObj (obj) {
   F.prototype = obj
   return new F()
 }
+
+Object.prototype.delete = function (name) {
+  delete this[name]
+}
