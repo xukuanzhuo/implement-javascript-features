@@ -1,21 +1,26 @@
-function Emitter () {
-  this.eventPool = {}
-}
-
-Emitter.prototype.on = function (name, fn) {
-  if (!this.eventPool[name]) {
-    this.eventPool[name] = []
+class Emitter {
+  constructor () {
+    this.eventpool = {}
   }
 
-  this.eventPool.push(fn)
-}
-
-Emitter.prototype.emit = function (name, ...args) {
-  if (this.eventPool[name]) {
-    this.eventPool[name].forEach(event => event.apply(...args))
+  on (name, callback) {
+    if (!this.eventpool[name]) {
+      this.eventpool[name] = []
+    }
+    this.eventpool[name].push(callback)
   }
-}
 
-Emitter.prototype.off = function (name) {
-  delete this.eventPool[name]
+  off (name) {
+    if (this.eventpool[name]) {
+      delete this.eventpool[name]
+    }
+  }
+
+  emit (name, ...args) {
+    if (!this.eventpool[name]) return
+    const len = this.eventpool[name].length
+    for (let i = 0; i < len; i++) {
+      this.eventpool[name][i](...args)
+    }
+  }
 }
